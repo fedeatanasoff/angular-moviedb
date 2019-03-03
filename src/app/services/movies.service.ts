@@ -11,6 +11,27 @@ export class MoviesService {
 
   constructor(private http: HttpClient) {}
 
+  getCartelera() {
+    let desde = new Date();
+    let hasta = new Date();
+    hasta.setDate(hasta.getDate() + 7);
+
+    let desdeStr = `${desde.getFullYear()}-${desde.getMonth() +
+      1}-${desde.getDay()}`;
+    let hastaStr = `${hasta.getFullYear()}-${hasta.getMonth() +
+      1}-${hasta.getDay()}`;
+
+    " /discover/movie?primary_release_date.gte=${desdeStr}&primary_release_date.lte=${hastaStr}";
+
+    let url = `${
+      this.urlMoviedb
+    }/discover/movie?primary_release_date.gte=${desdeStr}&primary_release_date.lte=${hastaStr}&api_key=${
+      this.apikey
+    }&language=es&callback=JSONP_CALLBACK`;
+
+    return this.http.jsonp(url, "JSONP_CALLBACK").pipe(map(res => res));
+  }
+
   getPopulares() {
     let url = `${
       this.urlMoviedb
